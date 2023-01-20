@@ -1,4 +1,3 @@
-import './App.css';
 import Home from './routes/Home';
 import RestaurantDetailPage from './routes/RestaurantDetailPage';
 import UpdatePage from './routes/UpdatePage';
@@ -12,7 +11,7 @@ import {
 function App() {
   return (
     <BrowserRouter>
-      <div className="App">
+      <div className="App container">
         <Routes>
           <Route exact path="/" element={<Home/>} />
           <Route exact path="/restaurants/:id/update" element={<UpdatePage/>} />
