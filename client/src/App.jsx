@@ -7,18 +7,21 @@ import {
   Route,
   Link,
 } from "react-router-dom";
+import { RestaurantsContextProvider } from './context/RestaurantsContext';
 
 function App() {
   return (
-    <BrowserRouter>
-      <div className="App container">
-        <Routes>
-          <Route exact path="/" element={<Home/>} />
-          <Route exact path="/restaurants/:id/update" element={<UpdatePage/>} />
-          <Route exact path="//restaurants/:id" element={<RestaurantDetailPage/>} />
-        </Routes>
-      </div>
-    </BrowserRouter>    
+    <RestaurantsContextProvider>
+      <BrowserRouter>
+        <div className="App container">
+          <Routes>
+            <Route exact path="/" element={<Home/>} />
+            <Route exact path="/restaurants/:id/update" element={<UpdatePage/>} />
+            <Route exact path="//restaurants/:id" element={<RestaurantDetailPage/>} />
+          </Routes>
+        </div>
+      </BrowserRouter>    
+    </RestaurantsContextProvider>
   );
 }
 

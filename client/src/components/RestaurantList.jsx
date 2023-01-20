@@ -3,7 +3,7 @@
 const RestaurantList = () => {
   return (
     <div className="list-group">
-        <table class="table table-striped table-dark">
+        <table className="table table-striped table-dark">
             <thead>
                 <tr>
                     <th scope="col">Restaurant</th>
