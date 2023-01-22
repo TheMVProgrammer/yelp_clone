@@ -5,7 +5,6 @@ import { RestaurantsContext } from "../context/RestaurantsContext";
 const RestaurantList = (props) => {
 
     const {restaurants, setRestaurants} = useContext(RestaurantsContext);
-
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -34,38 +33,24 @@ const RestaurantList = (props) => {
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>McDonalds</td>
-                    <td>New York</td>
-                    <td>$$</td>
-                    <td>Rating</td>
-                    <td>
+                {restaurants && restaurants.map(restaurant => (
+                    <tr key={restaurant.restaurant_id}>
+                        <td>{restaurant.name}</td>
+                        <td>{restaurant.location}</td>
+                        <td>{"$".repeat(restaurant.price_range)}</td>
+                        <td>Rating</td>
+                        <td>
                         <button className="btn btn-warning">
                             Update
                         </button>
-                    </td>
-                    <td>
-                        <button className="btn btn-danger">
-                            Delete
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>McDonalds</td>
-                    <td>New York</td>
-                    <td>$$</td>
-                    <td>Rating</td>
-                    <td>
-                        <button className="btn btn-warning">
-                            Update
-                        </button>
-                    </td>
-                    <td>
-                        <button className="btn btn-danger">
-                            Delete
-                        </button>
-                    </td>
-                </tr>
+                        </td>
+                        <td>
+                            <button className="btn btn-danger">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                ))}
             </tbody>
         </table>
     </div>
