@@ -5,7 +5,7 @@ import {
   BrowserRouter,
   Routes,
   Route,
-  Link,
+  useParams,
 } from "react-router-dom";
 import { RestaurantsContextProvider } from './context/RestaurantsContext';
 
