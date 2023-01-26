@@ -28,10 +28,22 @@ const AddRestaurant = () => {
             <form action="">
                 <div className="d-flex flex-row flex-wrap gap-3 justify-content-evenly align-items-center">
                     <div className="col">
-                        <input value={name} onChange={e => setName(e.target.value)} type="text" className="form-control" placeholder="name" />
+                        <input 
+                            value={name} 
+                            onChange={e => setName(e.target.value)} 
+                            type="text" 
+                            className="form-control" 
+                            placeholder="name" 
+                        />
                     </div>
                     <div className="col">
-                        <input value={location} onChange={e => setLocation(e.target.value)} type="text" className="form-control" placeholder="location"/>
+                        <input 
+                            value={location} 
+                            onChange={e => setLocation(e.target.value)} 
+                            type="text" 
+                            className="form-control" 
+                            placeholder="location"
+                        />
                     </div>
                     <div className="col">
                         <select value={priceRange} onChange={e => setPriceRange(e.target.value)} className="form-select my-1 mr-sm-2">
