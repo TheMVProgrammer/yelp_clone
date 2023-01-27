@@ -9,22 +9,21 @@ app.use(cors());
 app.use(express.json());
 
 //Get all restaurants
-app.get("/api/v1/restaurants", async (req, res) => {    
-    try {
-        const restaurants = await db.query('select * from restaurants');
-        const restaurantRatingsData = await db.query('select * from restaurants LEFT JOIN (select restaurant_id, COUNT(*), TRUNC(AVG(rating), 1) as average_rating from reviews group by restaurant_id) reviews on restaurants.restaurant_id = reviews.restaurant_id;');
+app.get("/api/v1/restaurants", async (req, res) => {
+  try {
+    const restaurantRatingsData = await db.query(
+      "SELECT restaurants.restaurant_id, restaurants.name, restaurants.location, restaurants.price_range, COUNT(reviews.rating), TRUNC(AVG(reviews.rating), 1) as average_rating FROM restaurants LEFT JOIN  reviews ON restaurants.restaurant_id = reviews.restaurant_id GROUP BY restaurants.restaurant_id, reviews.restaurant_id;");
 
-        res.status(200).json({
-            status: "success",
-            results: restaurantRatingsData.rowCount,
-            data: {
-                restaurants: restaurants.rows,
-                reviews: restaurantRatingsData //Lo puse aparte aqui porque si lo pongo todo junto los restaurantes sin reviews me salen null
-            },        
-        });
-    } catch (error) {
-        console.log(error);
-    }
+    res.status(200).json({
+      status: "success",
+      results: restaurantRatingsData.rowCount,
+      data: {
+        restaurants: restaurantRatingsData.rows,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 

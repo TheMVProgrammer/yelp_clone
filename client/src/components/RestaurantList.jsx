@@ -2,6 +2,8 @@ import { useEffect, useContext } from "react";
 import RestaurantFinder from "../apis/RestaurantFinder";
 import { RestaurantsContext } from "../context/RestaurantsContext";
 import { useNavigate } from "react-router-dom";
+import StarRating from "./StarRating";
+import { useState } from "react";
 
 const RestaurantList = (props) => {
     const {restaurants, setRestaurants} = useContext(RestaurantsContext);
@@ -10,6 +12,7 @@ const RestaurantList = (props) => {
         const fetchData = async () => {
             try {
                 const response = await RestaurantFinder.get("/");
+                console.log(response.data.data.restaurants);
                 setRestaurants(response.data.data.restaurants);
             } catch (error) {
                 console.log(error);
@@ -45,6 +48,15 @@ const RestaurantList = (props) => {
         navigate(`/restaurants/${id}`);
     } 
 
+    const renderRating = (restaurant) => {
+        return (
+            <>
+                <StarRating rating={restaurant.average_rating}/>
+                <span className="text-warning"> ({restaurant.count ? restaurant.count : 0})</span>
+            </>            
+        )
+    }
+
     return (
         <div className="list-group">
             <table className="table table-striped table-dark">
@@ -67,7 +79,7 @@ const RestaurantList = (props) => {
                             <td>{restaurant.name}</td>
                             <td>{restaurant.location}</td>
                             <td>{"$".repeat(restaurant.price_range)}</td>
-                            <td>Rating</td>
+                            <td>{renderRating(restaurant)}</td>
                             <td>
                             <button onClick={(e)=> handleUpdate(e, restaurant.restaurant_id)} className="btn btn-warning">
                                 Update
