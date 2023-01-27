@@ -11,12 +11,15 @@ app.use(express.json());
 //Get all restaurants
 app.get("/api/v1/restaurants", async (req, res) => {    
     try {
-        const results = await db.query('SELECT restaurant_id, name, location, price_range FROM restaurants');
+        const restaurants = await db.query('select * from restaurants');
+        const restaurantRatingsData = await db.query('select * from restaurants LEFT JOIN (select restaurant_id, COUNT(*), TRUNC(AVG(rating), 1) as average_rating from reviews group by restaurant_id) reviews on restaurants.restaurant_id = reviews.restaurant_id;');
+
         res.status(200).json({
             status: "success",
-            results: results.rowCount,
+            results: restaurantRatingsData.rowCount,
             data: {
-                restaurants: results.rows,
+                restaurants: restaurants.rows,
+                reviews: restaurantRatingsData //Lo puse aparte aqui porque si lo pongo todo junto los restaurantes sin reviews me salen null
             },        
         });
     } catch (error) {
@@ -29,7 +32,7 @@ app.get("/api/v1/restaurants", async (req, res) => {
 
 app.get("/api/v1/restaurants/:id", async (req, res) => {
     try {
-        const restaurant = await db.query('SELECT restaurant_id, name, location, price_range FROM restaurants WHERE restaurant_id = $1', [req.params.id]);
+        const restaurant = await db.query('SELECT * FROM restaurants LEFT JOIN (SELECT restaurant_id, COUNT(*), TRUNC(AVG(rating), 1) as average_rating FROM reviews GROUP BY restaurant_id) reviews on restaurants.restaurant_id = reviews.restaurant_id WHERE restaurants.restaurant_id = $1', [req.params.id]);
 
         const reviews = await db.query('SELECT reviews_id, restaurant_id, name, review, rating FROM reviews WHERE restaurant_id = $1', [req.params.id]);
         
@@ -90,6 +93,20 @@ app.delete("/api/v1/restaurants/:id", async (req, res) => {
         console.log(error);
     }
 });
+
+app.post("/api/v1/restaurants/:id/addReview", async (req, res) => {
+    try {
+        const newReview = await db.query("INSERT INTO reviews (restaurant_id, name, review, rating) VALUES ($1, $2, $3, $4);", [req.params.id, req.body.name, req.body.review, req.body.rating]);
+        res.status(201).json({
+            status: 'success',
+            data: {
+                review: newReview.rows[0]
+            },
+        });
+    } catch (error) {
+        console.log(error);
+    }
+})
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => {

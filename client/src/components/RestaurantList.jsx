@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 const RestaurantList = (props) => {
     const {restaurants, setRestaurants} = useContext(RestaurantsContext);
     const navigate = useNavigate();
-
     useEffect(() => {
         const fetchData = async () => {
             try {
